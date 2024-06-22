@@ -15,6 +15,8 @@ app.use(cors({
 
 app.use("/api/admin", require("./routes/admin.routes"))
 app.use("/api/auth", require("./routes/auth.route"))
+app.use("/api/public", require("./routes/public.route"))
+app.use("/api/user", require("./routes/user.route"))
 
 app.use("*", (req, res) => {
     res.status(404).json({ message: "Resource Not Found" })

@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         enum: ["placed", "cancel", "delivered"],
         default: "placed",
-        required: true
+        required: false
     },
 }, { timestamps: true })
 
