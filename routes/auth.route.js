@@ -7,7 +7,7 @@ router
     .post("/registerAdmin", authController.registerAdmin)
     .post("/loginAdmin", authController.loginAdmin)
     .post("/logoutAdmin", authController.logout)
-    .post("/registerUser", authController.registerUser)
-    .post("/loginUser", authController.loginUser)
+    .post("/customerRegister", authController.registerUser)
+    .post("/customerLogin", authController.loginUser)
 
 module.exports = router
