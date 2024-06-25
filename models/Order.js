@@ -6,11 +6,19 @@ const orderSchema = new mongoose.Schema({
         ref: "user",
         required: true
     },
-    products: {
-        type: [mongoose.Types.ObjectId],
-        ref: "product",
-        required: true
-    },
+    products: [
+        {
+            product: {
+                type: mongoose.Types.ObjectId,
+                ref: "product",
+                required: true
+            },
+            qty: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
     status: {
         type: String,
         enum: ["placed", "cancel", "delivered"],
