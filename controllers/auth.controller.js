@@ -42,7 +42,7 @@ exports.logout = asyncHandler(async (req, res) => {
 })
 
 exports.registerUser = asyncHandler(async (req, res) => {
-    const { password } = req.body
+    const { name, email, password } = req.body
     const hash = await bcrypt.hash(password, 10)
     await User.create({ name, email, password: hash })
     if (found) {
