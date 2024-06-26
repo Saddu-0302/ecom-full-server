@@ -45,7 +45,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body
     const hash = await bcrypt.hash(password, 10)
     const found = await User.create({ name, email, password: hash })
-    if (!found) {
+    if (found) {
         return res.status(401).json({ message: "Email Already Registered" })
     }
     res.json({ message: "User Register Success" })
