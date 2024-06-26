@@ -44,10 +44,11 @@ exports.logout = asyncHandler(async (req, res) => {
 exports.registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body
     const hash = await bcrypt.hash(password, 10)
-    const found = await User.create({ name, email, password: hash })
+    const found = await User.findOne({ email })
     if (found) {
         return res.status(401).json({ message: "Email Already Registered" })
     }
+    await User.create({ name, email, password: hash })
     res.json({ message: "User Register Success" })
 })
 exports.loginUser = asyncHandler(async (req, res) => {
