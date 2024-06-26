@@ -7,10 +7,11 @@ const User = require("../models/User")
 exports.registerAdmin = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body
     const hash = await bcrypt.hash(password, 10)
-    const found = await Admin.create({ name, email, password: hash })
+    const found = await Admin.findOne({ email })
     if (!found) {
         return res.status(401).json({ message: "Email already Registered" })
     }
+    const found = await Admin.create({ name, email, password: hash })
     res.json({ message: "Admin Register Success" })
 })
 exports.loginAdmin = asyncHandler(async (req, res) => {
