@@ -11,7 +11,7 @@ exports.registerAdmin = asyncHandler(async (req, res) => {
     if (!found) {
         return res.status(401).json({ message: "Email already Registered" })
     }
-    const found = await Admin.create({ name, email, password: hash })
+    await Admin.create({ name, email, password: hash })
     res.json({ message: "Admin Register Success" })
 })
 exports.loginAdmin = asyncHandler(async (req, res) => {
