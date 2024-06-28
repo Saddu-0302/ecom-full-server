@@ -9,7 +9,7 @@ const app = express()
 app.use(express.json())
 app.use(cors({
     origin: true,
-    credentials: true  // thats use for store cookie
+    credentials: true // thats use for store cookie
 }
 ))
 
