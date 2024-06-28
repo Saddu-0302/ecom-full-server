@@ -4,12 +4,12 @@ const Order = require("../models/Order")
 
 exports.userGetAllOrders = asyncHandler(async (req, res) => {
     const result = await Order.find({ user: req.params.id })
-    res.json({ message: "Order fetch success" })
+    res.json({ message: "Order fetch success", result })
 })
 
 exports.userGetOrderDetails = asyncHandler(async (req, res) => {
     const result = await Order.findById(req.params.id)
-    res.json({ message: "Order Details fetch success" })
+    res.json({ message: "Order Details fetch success", result })
 })
 exports.userUpdatePassword = asyncHandler(async (req, res) => {
 
