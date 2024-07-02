@@ -90,7 +90,7 @@ exports.cancelOrder = asyncHandler(async (req, res) => {
 exports.updateOrderStatus = asyncHandler(async (req, res) => {
     const { orderStatusId } = req.params
     const { status } = req.body
-    await Order.findByIdAndUpdate(id, { status })
+    await Order.findByIdAndUpdate(orderStatusId, { status })
     res.json({ message: "Order status update Success" })
 })
 
