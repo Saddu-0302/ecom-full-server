@@ -59,7 +59,11 @@ exports.getProductDetails = asyncHandler(async (req, res) => {
 
 // order
 exports.getAllOrder = asyncHandler(async (req, res) => {
-    const result = await Order.find().sort({ createdAt: -1 })
+    const result = await Order
+        .find()
+        .populate("user")
+        .populate("products.product")
+        .sort({ createdAt: -1 })
     res.json({ message: "Order Fetch Success", result })
 })
 exports.getOrderDetails = asyncHandler(async (req, res) => {
