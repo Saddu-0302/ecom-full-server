@@ -66,7 +66,8 @@ exports.getAllOrder = asyncHandler(async (req, res) => {
                 password: 0,
                 active: 0,
                 createdAt: 0,
-                updatedAt: 0, __v
+                updatedAt: 0,
+                __v: 0
             })
         .populate("products.product", {
             _id: 1,
