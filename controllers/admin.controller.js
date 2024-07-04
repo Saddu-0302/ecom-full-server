@@ -105,9 +105,11 @@ exports.getUserDetails = asyncHandler(async (req, res) => {
     res.json({ message: "User Details Fetch Success" })
 })
 exports.blockUsers = asyncHandler(async (req, res) => {
+    await User.findByIdAndUpdate(req.params.userBlockId, { active: false })
     res.json({ message: "User Block Success" })
 })
 exports.unBlockUsers = asyncHandler(async (req, res) => {
+    await User.findByIdAndUpdate(req.params.userUnlockId, { active: true })
     res.json({ message: "User Unblock Success" })
 })
 exports.getUserOrders = asyncHandler(async (req, res) => {
