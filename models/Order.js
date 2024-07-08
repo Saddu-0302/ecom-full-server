@@ -25,6 +25,18 @@ const orderSchema = new mongoose.Schema({
         default: "placed",
         required: false
     },
+    address: {
+        type: String,
+        required: true
+    },
+    mobile: {
+        type: String,
+        required: true
+    },
+    cod: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true })
 
 module.exports = mongoose.model("order", orderSchema)
