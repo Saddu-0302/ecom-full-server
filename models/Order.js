@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     mobile: {
-        type: String,
+        type: Number,
         required: true
     },
     cod: {
