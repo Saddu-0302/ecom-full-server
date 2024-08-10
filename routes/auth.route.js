@@ -9,5 +9,6 @@ router
     .post("/logoutAdmin", authController.logout)
     .post("/customer-register", authController.registerUser)
     .post("/customer-login", authController.loginUser)
+    .post("/continue-with-google", authController.continueWithGoogle)
 
 module.exports = router

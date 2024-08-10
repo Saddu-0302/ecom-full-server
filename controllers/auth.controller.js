@@ -4,6 +4,10 @@ const Admin = require("../models/Admin")
 const JWT = require("jsonwebtoken")
 const User = require("../models/User")
 
+const { OAuth2Client } = require("google-auth-library")
+
+
+
 exports.registerAdmin = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body
     const hash = await bcrypt.hash(password, 10)
@@ -78,4 +82,22 @@ exports.loginUser = asyncHandler(async (req, res) => {
             email: result.email
         }
     })
+})
+
+exports.continueWithGoogle = asyncHandler(async (req, res) => {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+    const { payload } = client.verifyIdToken({ idToken: req.body.credential })
+    const isExist = await User.findOne({ email: payload.email })
+    if (isExist) {
+        return res.json({ message: "User Login Success" })
+    } else {
+
+        const result = await User.create({
+            name: payload.name,
+            email: payload.email,
+            photo: payload.photo
+        })
+    }
+
+    res.json({ message: "User Register Success", result })
 })

@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    photo: {
+        type: String,
+        required: true
+    },
     active: {
         type: Boolean,
         default: true
