@@ -86,18 +86,30 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
 exports.continueWithGoogle = asyncHandler(async (req, res) => {
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-    const { payload } = client.verifyIdToken({ idToken: req.body.credential })
-    const isExist = await User.findOne({ email: payload.email })
-    if (isExist) {
-        return res.json({ message: "User Login Success" })
+    const { payload } = await client.verifyIdToken({ idToken: req.body.credential })
+    console.log(payload);
+
+    const result = await User.findOne({ email: payload.email })
+    if (result) {
+        const token = JWT.sign({ userId: result._id }, process.env.JWT_KEY, { expiresIn: "1d" })
+        res.cookie("customer", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 })
+        return res.json({
+            message: "User Login Success", result: {
+                _id: result._id,
+                name: result.name,
+                email: result.email,
+                photo: payload.picture
+            }
+        })
     } else {
 
         const result = await User.create({
             name: payload.name,
             email: payload.email,
-            photo: payload.photo
+            photo: payload.picture
         })
+        const token = JWT.sign({ userId: result._id }, process.env.JWT_KEY, { expiresIn: "1d" })
+        res.cookie("customer", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 })
+        res.json({ message: "User Register Success", result })
     }
-
-    res.json({ message: "User Register Success", result })
 })

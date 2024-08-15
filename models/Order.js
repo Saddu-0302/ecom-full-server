@@ -13,10 +13,10 @@ const orderSchema = new mongoose.Schema({
                 ref: "product",
                 required: true
             },
-            qty: {
-                type: Number,
-                required: true
-            }
+            // qty: {
+            //     type: Number,
+            //     required: true
+            // }
         }
     ],
     status: {
@@ -33,10 +33,34 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    cod: {
-        type: Boolean,
-        default: false
-    }
+    paymentMethod: {
+        type: String,
+        required: true
+    },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    postalCode: {
+        type: String,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
 }, { timestamps: true })
 
 module.exports = mongoose.model("order", orderSchema)
