@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    otp: { type: Number },
 }, { timestamps: true })
 
 module.exports = mongoose.model("user", userSchema)

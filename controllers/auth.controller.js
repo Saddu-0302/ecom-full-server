@@ -6,7 +6,8 @@ const User = require("../models/User")
 
 const { OAuth2Client } = require("google-auth-library")
 
-
+const sendEmail = require("../utils/email")
+const { checkEmpty } = require("../utils/checkEmpty")
 
 exports.registerAdmin = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body
@@ -58,32 +59,70 @@ exports.registerUser = asyncHandler(async (req, res) => {
 })
 exports.loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body
-    const result = await User.findOne({ email })
+    const isMatch = await User.findOne({ email })
 
-    if (!result) {
+    if (!isMatch) {
         res.json({ message: "Email Not found" })
     }
 
-    const verify = bcrypt.compare(password, result.password)
+    const verify = bcrypt.compare(password, isMatch.password)
     if (!verify) {
         res.json("Password Not Verify")
     }
 
-    if (!result.active) {
+    const otp = Math.floor(100000 + Math.random() * 900000)
+
+    await sendEmail({
+        to: email,
+        subject: 'Login OTP',
+        message: `<h1>Do Not Share Your Account OTP With Any One</h1><p>Your Login OTP ${otp}</p>`
+    });
+
+    await User.findByIdAndUpdate(isMatch._id, { otp });
+
+    if (!isMatch.active) {
         return res.status(401).json({ message: "Account Block By Admin" })
     }
 
-    token = JWT.sign({ userId: result._id }, process.env.JWT_KEY)
-    res.cookie("user", token, { httpOnly: true })
+    res.status(200).json({
+        message: "OTP Send Successfully", result: email
+    })
+})
+exports.verifyOTP = asyncHandler(async (req, res) => {
+    const { email, otp } = req.body
+    const { isError, error } = checkEmpty({ email, otp });
+    if (isError) {
+        return res.status(400).json({ message: 'All Fields Required', error })
+    }
+
+    const result = await User.findOne({ email })
+    console.log(result.opt != otp);
+    console.log(result.opt, otp);
+
+    if (!result) {
+        return res.status(400).json({ message: "User Not found with this email" })
+    }
+    if (result.otp != otp) {
+        return res.status(400).json({ message: "Invalid OTP" })
+    }
+
+    const token = JWT.sign({ userId: result._id }, process.env.JWT_KEY, { expiresIn: "1d" })
+
+    res.cookie('user', token, {
+        maxAge: 86400000,
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === "production"
+    })
     res.json({
-        message: "User Login Success", result: {
+        message: "Login Success",
+        result: {
             _id: result._id,
             name: result.name,
             email: result.email
         }
     })
 })
-
 exports.continueWithGoogle = asyncHandler(async (req, res) => {
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
     const { payload } = await client.verifyIdToken({ idToken: req.body.credential })
