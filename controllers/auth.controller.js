@@ -60,6 +60,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
 exports.loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body
     const isMatch = await User.findOne({ email })
+    console.log(req.body);
 
     if (!isMatch) {
         res.json({ message: "Email Not found" })
@@ -89,15 +90,14 @@ exports.loginUser = asyncHandler(async (req, res) => {
     })
 })
 exports.verifyOTP = asyncHandler(async (req, res) => {
-    const { email, otp } = req.body
-    const { isError, error } = checkEmpty({ email, otp });
-    if (isError) {
-        return res.status(400).json({ message: 'All Fields Required', error })
-    }
+    const { email, otp, } = req.body
+
+    console.log(req.body.email);
+    // console.log(req.body.user);
 
     const result = await User.findOne({ email })
-    console.log(result.opt != otp);
-    console.log(result.opt, otp);
+
+    console.log(result);
 
     if (!result) {
         return res.status(400).json({ message: "User Not found with this email" })
@@ -108,7 +108,7 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
 
     const token = JWT.sign({ userId: result._id }, process.env.JWT_KEY, { expiresIn: "1d" })
 
-    res.cookie('user', token, {
+    res.cookie('otp', token, {
         maxAge: 86400000,
         httpOnly: true,
         sameSite: 'strict',

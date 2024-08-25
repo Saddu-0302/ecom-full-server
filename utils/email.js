@@ -23,3 +23,4 @@ const sendEmail = ({ to, subject, message }) => new Promise((resolve, reject) =>
         }
     })
 })
+module.exports = sendEmail

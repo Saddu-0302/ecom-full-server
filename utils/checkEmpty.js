@@ -9,4 +9,5 @@ exports.checkEmpty = (fields) => {
             isError = true
         }
     }
+    return { isError, error }
 }
